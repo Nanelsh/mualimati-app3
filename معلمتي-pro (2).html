@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>مُعلِّمتي Pro</title>
+
+<!-- PWA -->
+<meta name="application-name" content="مُعلِّمتي Pro">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="مُعلِّمتي">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#ffffff">
+<meta name="msapplication-TileColor" content="#3b6ff0">
+<link rel="manifest" id="manifestLink">
+
+<!-- iOS splash icons (inline SVG as data URI) -->
+<link rel="apple-touch-icon" id="appleIcon">
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════
+   LIGHT THEME VARIABLES
+══════════════════════════════ */
+:root {
+  --bg:      #f0f4f8;
+  --s1:      #ffffff;
+  --s2:      #f5f7fa;
+  --s3:      #edf0f5;
+  --border:  #dde3ed;
+  --text:    #1a2236;
+  --muted:   #8494ae;
+  --shadow:  0 1px 4px rgba(30,50,100,.07), 0 4px 16px rgba(30,50,100,.05);
+  --accent:  #3b6ff0;
+  --teal:    #0ea5a0;
+  --green:   #16a34a;
+  --red:     #dc2626;
+  --yellow:  #d97706;
+  --orange:  #ea580c;
+  --pink:    #db2777;
+  --r:       14px;
+}
+* { margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent }
+html { height:100%;overflow:hidden }
+body { font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--bg);color:var(--text);height:100%;display:flex;flex-direction:column;overflow:hidden }
+
+/* ── HEADER ── */
+.hdr {
+  flex-shrink:0;
+  background:var(--s1);
+  border-bottom:1px solid var(--border);
+  padding:13px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 8px rgba(30,50,100,.06);
+  z-index:30;position:relative;
+}
+.hdr-brand { font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:7px }
+.hdr-brand span { color:var(--accent) }
+.hdr-right { display:flex;align-items:center;gap:10px }
+#hTime { font-size:.9rem;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums }
+#hDate { font-size:.6rem;color:var(--muted);margin-top:1px;text-align:left }
+.theme-btn { background:var(--s2);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.95rem;transition:all .2s }
+.theme-btn:active { transform:scale(.9) }
+
+/* ── SCROLL ── */
+.scroll { flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch }
+.page { display:none;padding:14px 14px 88px;min-height:100% }
+.page.on { display:block }
+
+/* ── BOTTOM NAV ── */
+.nav {
+  flex-shrink:0;background:var(--s1);border-top:1px solid var(--border);
+  display:flex;box-shadow:0 -2px 8px rgba(30,50,100,.06);
+}
+.ni {
+  flex:1;padding:10px 2px 8px;text-align:center;cursor:pointer;
+  font-size:.57rem;color:var(--muted);border:none;background:none;
+  font-family:'IBM Plex Sans Arabic',sans-serif;transition:color .2s;
+}
+.ni.on { color:var(--accent) }
+.ni .ic { font-size:1.2rem;display:block;margin-bottom:1px }
+
+/* ── STATS ── */
+.stats { display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px }
+.sc {
+  background:var(--s1);border:1px solid var(--border);border-radius:12px;
+  padding:13px 8px;text-align:center;box-shadow:var(--shadow);
+}
+.sc-num { font-size:1.7rem;font-weight:700;line-height:1 }
+.sc-lbl { font-size:.6rem;color:var(--muted);margin-top:3px }
+
+/* ── CARD ── */
+.card { background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:var(--shadow) }
+.ct { font-size:.7rem;color:var(--muted);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px }
+.stitle { font-size:.9rem;font-weight:700;margin:14px 0 8px;display:flex;align-items:center;gap:6px;color:var(--text) }
+
+/* ── STUDENT ROW ── */
+.srow {
+  background:var(--s1);border:1px solid var(--border);border-radius:12px;
+  padding:11px 13px;margin-bottom:7px;display:flex;align-items:center;gap:10px;
+  cursor:pointer;transition:all .2s;box-shadow:var(--shadow);
+}
+.srow:active { border-color:var(--accent);transform:scale(.99) }
+.av { width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;flex-shrink:0 }
+.sn { font-size:.88rem;font-weight:600;color:var(--text) }
+.ss { font-size:.63rem;color:var(--muted);margin-top:2px }
+.badge { font-size:.63rem;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap }
+.bg { background:#dcfce7;color:var(--green) }
+.by { background:#fef3c7;color:var(--yellow) }
+.br { background:#fee2e2;color:var(--red) }
+.bb { background:#dbeafe;color:var(--accent) }
+.bpaid   { background:#dcfce7;color:var(--green) }
+.bunpaid { background:#fee2e2;color:var(--red) }
+.bpart   { background:#fef3c7;color:var(--yellow) }
+
+/* ── ATTENDANCE ── */
+.arow {
+  background:var(--s1);border:1px solid var(--border);border-radius:12px;
+  padding:10px 12px;margin-bottom:7px;display:flex;align-items:center;gap:9px;
+  box-shadow:var(--shadow);transition:border-color .15s;
+}
+.abtns { display:flex;gap:5px;margin-right:auto }
+.ab {
+  width:36px;height:36px;border-radius:9px;border:1.5px solid var(--border);
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;
+  font-size:.95rem;background:var(--s2);
+}
+.ab:active { transform:scale(.88) }
+.ab.sp { background:var(--green)!important;border-color:var(--green)!important;color:#fff!important }
+.ab.sl { background:var(--yellow)!important;border-color:var(--yellow)!important;color:#fff!important }
+.ab.sa { background:var(--red)!important;border-color:var(--red)!important;color:#fff!important }
+
+/* ── LESSON CARD ── */
+.lcard {
+  background:var(--s1);border:1px solid var(--border);border-radius:12px;
+  padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;
+  position:relative;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);
+}
+.lcard:active { transform:scale(.99);border-color:var(--accent) }
+.lcbar { width:4px;border-radius:4px;align-self:stretch;flex-shrink:0;min-height:36px }
+.lctime { font-size:.95rem;font-weight:700;color:var(--text);white-space:nowrap }
+.lcsub { font-size:.62rem;color:var(--muted);margin-top:2px }
+.lcname { font-size:.88rem;font-weight:600;color:var(--text) }
+.lcgrp { font-size:.63rem;margin-top:2px }
+.adot { position:absolute;top:8px;left:10px;width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 1.4s infinite }
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.5)}}
+
+/* ── TIMETABLE ── */
+.tt-wrap { overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px }
+.tt-grid { display:grid;grid-template-columns:44px repeat(6,1fr);gap:2px;min-width:460px }
+.tt-head { font-size:.6rem;font-weight:700;color:var(--muted);text-align:center;padding:6px 2px;border-radius:6px;background:var(--s2);border:1px solid var(--border) }
+.tt-hour { font-size:.55rem;color:var(--muted);text-align:center;padding-top:5px;background:var(--s2);border-radius:5px;border:1px solid var(--border) }
+.tt-cell { border-radius:7px;min-height:42px;background:var(--s2);border:1px solid var(--border);cursor:pointer;transition:background .15s;overflow:hidden }
+.tt-cell:hover { border-color:var(--accent) }
+.tt-ev { padding:4px 5px;height:100%;display:flex;flex-direction:column;justify-content:center }
+.tt-evn { font-size:.58rem;font-weight:700;line-height:1.3 }
+.tt-evt { font-size:.52rem;opacity:.8;margin-top:1px }
+.today-col { background:rgba(59,111,240,.05)!important;border-color:rgba(59,111,240,.2)!important }
+
+/* ── PAY ROW ── */
+.prow {
+  background:var(--s1);border:1px solid var(--border);border-radius:12px;
+  padding:11px 13px;margin-bottom:7px;display:flex;align-items:center;gap:10px;
+  cursor:pointer;box-shadow:var(--shadow);transition:all .2s;
+}
+.prow:active { border-color:var(--teal) }
+.pay-s { font-size:.68rem;font-weight:700;padding:4px 9px;border-radius:20px;white-space:nowrap }
+
+/* ── PROGRESS ── */
+.pbar { background:var(--s3);border-radius:20px;height:7px;margin-top:6px;overflow:hidden }
+.pf { height:100%;border-radius:20px;transition:width .6s ease }
+
+/* ── TABS ── */
+.tabs { display:flex;background:var(--s2);border-radius:11px;padding:3px;margin-bottom:12px;gap:3px;border:1px solid var(--border) }
+.tab { flex:1;padding:7px;text-align:center;border-radius:8px;font-size:.7rem;font-weight:600;cursor:pointer;color:var(--muted);transition:all .2s;font-family:'IBM Plex Sans Arabic',sans-serif;border:none;background:none }
+.tab.on { background:var(--accent);color:#fff }
+
+/* ── DAY SCROLL ── */
+.dscroll { display:flex;gap:7px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;scrollbar-width:none }
+.dscroll::-webkit-scrollbar { display:none }
+.dtab { flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--s1);color:var(--muted);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.75rem;cursor:pointer;transition:all .2s;box-shadow:var(--shadow) }
+.dtab.on { background:var(--accent);color:#fff;border-color:var(--accent) }
+.dtab.today-t { border-color:var(--teal);color:var(--teal) }
+.dtab.today-t.on { background:var(--teal);color:#fff;border-color:var(--teal) }
+
+/* ── FORMS ── */
+.fi { width:100%;background:var(--s2);border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;color:var(--text);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none }
+.fi:focus { border-color:var(--accent);background:var(--s1) }
+.fl { font-size:.72rem;color:var(--muted);margin-bottom:5px;display:block;font-weight:600 }
+.fg { margin-bottom:10px }
+.fr2 { display:grid;grid-template-columns:1fr 1fr;gap:9px }
+.fr3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px }
+
+/* ── MODAL ── */
+.ov { display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center }
+.ov.on { display:flex }
+.modal { background:var(--s1);border-radius:22px 22px 0 0;padding:20px 16px 36px;width:100%;max-width:540px;max-height:92vh;overflow-y:auto;animation:up .28s cubic-bezier(.32,0,.15,1);border-top:1px solid var(--border) }
+@keyframes up { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.modal h2 { font-size:.98rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--text) }
+.brow { display:flex;gap:8px;margin-top:14px }
+.btn-p { flex:2;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s }
+.btn-p:active { opacity:.8 }
+.btn-s { flex:1;padding:12px;background:var(--s2);color:var(--muted);border:1px solid var(--border);border-radius:12px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.82rem;cursor:pointer }
+.btn-d { padding:9px 14px;background:#fee2e2;color:var(--red);border:1px solid #fca5a5;border-radius:10px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.78rem;cursor:pointer }
+
+/* ── FAB ── */
+.fab { position:fixed;bottom:76px;left:16px;width:50px;height:50px;border-radius:50%;background:var(--accent);color:#fff;font-size:1.5rem;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(59,111,240,.35);display:flex;align-items:center;justify-content:center;z-index:40;transition:transform .2s;font-weight:300 }
+.fab:active { transform:scale(.9) }
+
+/* ── TOAST ── */
+.toast { position:fixed;top:68px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--green);color:#fff;padding:9px 18px;border-radius:20px;font-size:.78rem;font-weight:700;opacity:0;transition:all .3s;z-index:500;pointer-events:none;white-space:nowrap;box-shadow:0 4px 16px rgba(22,163,74,.3) }
+.toast.on { opacity:1;transform:translateX(-50%) translateY(0) }
+
+/* ── ALARM ── */
+.alarm-scr { display:none;position:fixed;inset:0;background:rgba(240,244,248,.96);z-index:600;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;backdrop-filter:blur(10px) }
+.alarm-scr.on { display:flex }
+.alarm-bell { font-size:5rem;animation:bell .35s infinite alternate }
+@keyframes bell { from{transform:rotate(-10deg)} to{transform:rotate(10deg)} }
+.alarm-dismiss { padding:13px 36px;background:var(--accent);color:#fff;border:none;border-radius:14px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(59,111,240,.3) }
+
+/* ── MISC ── */
+.empty { text-align:center;color:var(--muted);padding:28px 16px;font-size:.82rem }
+.empty .ei { font-size:2.5rem;display:block;margin-bottom:8px }
+.sep { height:1px;background:var(--border);margin:12px 0 }
+.chip { padding:3px 9px;border-radius:10px;font-size:.63rem;font-weight:600 }
+.sum-chips { display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap }
+.co-row { display:flex;gap:7px;flex-wrap:wrap }
+.co { width:26px;height:26px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:all .2s;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.1) }
+.co.sel { border-color:var(--text)!important;transform:scale(1.15) }
+
+/* ── SUBJECT MANAGE ── */
+.subj-row { background:var(--s1);border:1px solid var(--border);border-radius:11px;padding:10px 13px;margin-bottom:7px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow) }
+.subj-row .sn { flex:1 }
+.icon-btn { width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;transition:all .2s;flex-shrink:0 }
+.icon-btn:active { transform:scale(.9) }
+.icon-btn.edit { color:var(--accent) }
+.icon-btn.del { color:var(--red) }
+
+/* ── HISTORY NOTE ── */
+.hist-banner { background:#fef3c7;border:1px solid #fde68a;border-radius:10px;padding:10px 13px;margin-bottom:12px;font-size:.78rem;color:#92400e;display:flex;align-items:center;gap:8px }
+
+/* ── INSTALL BANNER ── */
+.install-banner {
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  background:linear-gradient(135deg,#3b6ff0,#0ea5a0);
+  color:#fff;padding:14px 16px;z-index:1000;
+  flex-direction:column;gap:10px;
+  box-shadow:0 -4px 20px rgba(59,111,240,.25);
+  animation:slideUp .4s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.install-banner.show { display:flex }
+.install-top { display:flex;align-items:center;gap:12px }
+.install-icon { width:48px;height:48px;border-radius:12px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0 }
+.install-text .t1 { font-size:.95rem;font-weight:700 }
+.install-text .t2 { font-size:.72rem;opacity:.85;margin-top:2px }
+.install-btns { display:flex;gap:8px }
+.install-now { flex:1;padding:11px;background:#fff;color:#3b6ff0;border:none;border-radius:11px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer }
+.install-later { padding:11px 16px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:11px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.82rem;cursor:pointer }
+
+/* ── IOS GUIDE MODAL ── */
+.ios-guide { display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1100;align-items:flex-end;justify-content:center }
+.ios-guide.show { display:flex }
+.ios-box { background:#fff;border-radius:22px 22px 0 0;padding:22px 18px 36px;width:100%;max-width:500px;animation:up .3s ease }
+.ios-step { display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #eee }
+.ios-step:last-child { border-bottom:none }
+.ios-step-num { width:30px;height:30px;border-radius:50%;background:#3b6ff0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0 }
+.ios-step-text { font-size:.85rem;color:#1a2236;line-height:1.4 }
+.ios-step-icon { font-size:1.4rem;margin-right:4px }
+
+.ph-row { display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:.75rem }
+.ph-row:last-child { border-bottom:none }
+.ph-del { color:var(--red);font-size:.7rem;cursor:pointer;padding:2px 6px;border-radius:6px;background:#fee2e2;border:none;font-family:'IBM Plex Sans Arabic',sans-serif }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-brand">🎓 <span>مُعلِّمتي</span> Pro</div>
+  <div class="hdr-right">
+    <div style="text-align:left">
+      <div id="hTime"></div>
+      <div id="hDate"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ALARM -->
+<div class="alarm-scr" id="alarmScr">
+  <div class="alarm-bell">🔔</div>
+  <div style="font-size:1.5rem;font-weight:700;margin:16px 0 6px;color:var(--text)" id="alarmTitle"></div>
+  <div style="color:var(--muted);font-size:.9rem;margin-bottom:26px" id="alarmSub"></div>
+  <button class="alarm-dismiss" onclick="dismissAlarm()">✅ حسناً، جاهزة!</button>
+</div>
+
+<!-- SCROLL AREA -->
+<div class="scroll" id="mainScroll">
+
+<!-- ══ HOME ══ -->
+<div class="page on" id="pg-home">
+  <div class="stats">
+    <div class="sc"><div class="sc-num" id="stTot" style="color:var(--accent)">0</div><div class="sc-lbl">إجمالي الطلاب</div></div>
+    <div class="sc"><div class="sc-num" id="stPre" style="color:var(--green)">0</div><div class="sc-lbl">حاضر اليوم</div></div>
+    <div class="sc"><div class="sc-num" id="stUnp" style="color:var(--red)">0</div><div class="sc-lbl">لم يدفع</div></div>
+  </div>
+  <div class="stitle">📅 حصص اليوم</div>
+  <div id="hToday"></div>
+  <div class="stitle">⚠️ لم يدفعوا هذا الشهر</div>
+  <div id="hUnpaid"></div>
+</div>
+
+<!-- ══ STUDENTS ══ -->
+<div class="page" id="pg-students">
+  <div class="fg" style="margin-bottom:12px">
+    <input class="fi" id="srch" placeholder="🔍  ابحث عن طالب..." oninput="renderStudents()">
+  </div>
+  <div id="sList"></div>
+  <div id="sEmpty" class="empty" style="display:none"><span class="ei">👥</span>لا يوجد طلاب<br>اضغطي + لإضافة طالب</div>
+</div>
+
+<!-- ══ ATTENDANCE ══ -->
+<div class="page" id="pg-att">
+  <!-- Date navigator -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+    <button class="icon-btn" onclick="changeDay(-1)" style="border-radius:10px;width:38px;height:38px;flex-shrink:0">◀</button>
+    <input type="date" class="fi" id="attDate" onchange="renderAtt()" style="flex:1;text-align:center">
+    <button class="icon-btn" onclick="changeDay(1)" style="border-radius:10px;width:38px;height:38px;flex-shrink:0">▶</button>
+  </div>
+  <div id="attHistBanner"></div>
+  <div class="dscroll" id="grpTabs"></div>
+  <div class="sum-chips" id="attSum"></div>
+  <div id="attList"></div>
+  <button class="btn-p" style="width:100%;margin-top:4px" onclick="saveAtt()">💾 حفظ الحضور</button>
+</div>
+
+<!-- ══ TIMETABLE ══ -->
+<div class="page" id="pg-tt">
+  <div class="stitle" style="margin-top:0">📆 الجدول الأسبوعي</div>
+  <div class="tt-wrap"><div class="tt-grid" id="ttGrid"></div></div>
+  <div class="sep"></div>
+  <div class="stitle">قائمة الحصص</div>
+  <div class="dscroll" id="ttDayTabs"></div>
+  <div id="ttList"></div>
+  <button class="btn-p" style="width:100%;margin-top:4px" onclick="openLessonModal(null)">➕ إضافة حصة</button>
+</div>
+
+<!-- ══ PAYMENTS ══ -->
+<div class="page" id="pg-pay">
+  <div class="tabs">
+    <button class="tab on" onclick="filterPay('all',this)">الكل</button>
+    <button class="tab" onclick="filterPay('unpaid',this)">غير مدفوع</button>
+    <button class="tab" onclick="filterPay('partial',this)">جزئي</button>
+    <button class="tab" onclick="filterPay('paid',this)">مدفوع</button>
+  </div>
+  <div id="payList"></div>
+</div>
+
+<!-- ══ REPORTS ══ -->
+<div class="page" id="pg-rep">
+  <div class="card">
+    <div class="ct">معدل الحضور الكلي</div>
+    <div style="font-size:2.2rem;font-weight:700;color:var(--accent)" id="repAvg">—</div>
+    <div class="pbar"><div class="pf" id="repBar" style="background:var(--accent);width:0%"></div></div>
+  </div>
+  <div class="stitle">📋 تقرير تفصيلي</div>
+  <div id="repList"></div>
+</div>
+
+<!-- ══ SETTINGS ══ -->
+<div class="page" id="pg-set">
+  <div class="stitle" style="margin-top:0">📚 إدارة المواد</div>
+  <div id="subjList"></div>
+  <div style="display:flex;gap:8px;margin-top:4px">
+    <input class="fi" id="newSubjInp" placeholder="اسم المادة الجديدة..." style="flex:1">
+    <button class="btn-p" style="flex:0 0 auto;padding:11px 16px" onclick="addSubject()">+ إضافة</button>
+  </div>
+  <div class="sep"></div>
+  <div class="stitle">⚙️ البيانات</div>
+  <div class="srow" onclick="exportData()" style="cursor:pointer">
+    <span style="font-size:1.3rem">📤</span>
+    <div style="flex:1"><div class="sn">تصدير البيانات</div><div class="ss">حفظ كملف نصي</div></div>
+    <span style="color:var(--muted)">←</span>
+  </div>
+  <div class="srow" onclick="clearAll()" style="cursor:pointer">
+    <span style="font-size:1.3rem">🗑️</span>
+    <div style="flex:1"><div class="sn" style="color:var(--red)">مسح كل البيانات</div><div class="ss">لا يمكن التراجع</div></div>
+    <span style="color:var(--muted)">←</span>
+  </div>
+</div>
+
+</div><!-- /scroll -->
+
+<!-- BOTTOM NAV -->
+<div class="nav">
+  <button class="ni on" onclick="showPg('home',this)"><span class="ic">🏠</span>الرئيسية</button>
+  <button class="ni" onclick="showPg('students',this)"><span class="ic">👥</span>الطلاب</button>
+  <button class="ni" onclick="showPg('att',this)"><span class="ic">✅</span>الحضور</button>
+  <button class="ni" onclick="showPg('tt',this)"><span class="ic">📅</span>الجدول</button>
+  <button class="ni" onclick="showPg('pay',this)"><span class="ic">💸</span>المدفوعات</button>
+  <button class="ni" onclick="showPg('rep',this)"><span class="ic">📊</span>التقارير</button>
+  <button class="ni" onclick="showPg('set',this)"><span class="ic">⚙️</span>الإعدادات</button>
+</div>
+
+<button class="fab" id="fab" onclick="fabAct()">＋</button>
+
+<!-- ════════════ MODALS ════════════ -->
+
+<!-- ADD / EDIT STUDENT -->
+<div class="ov" id="mStudent">
+<div class="modal">
+  <h2 id="studentModalTitle">➕ طالب جديد</h2>
+  <input type="hidden" id="sId">
+  <div class="fg"><label class="fl">الاسم الكامل *</label><input class="fi" id="sName" placeholder="اسم الطالب"></div>
+  <div class="fr2">
+    <div class="fg"><label class="fl">المجموعة / الصف</label><input class="fi" id="sGroup" placeholder="مثال: مجموعة أ"></div>
+    <div class="fg"><label class="fl">المادة</label>
+      <select class="fi" id="sSubject"></select>
+    </div>
+  </div>
+  <div class="fr2">
+    <div class="fg"><label class="fl">رسوم الحصة (جنيه)</label><input class="fi" type="number" id="sFee" placeholder="200"></div>
+    <div class="fg"><label class="fl">موبايل ولي الأمر</label><input class="fi" id="sPhone" placeholder="01xxxxxxxxx"></div>
+  </div>
+  <div class="fg"><label class="fl">ملاحظات</label><input class="fi" id="sNotes" placeholder="اختياري..."></div>
+  <div class="brow">
+    <button class="btn-s" onclick="closeAll()">إلغاء</button>
+    <button class="btn-p" onclick="saveStudent()">✅ حفظ</button>
+  </div>
+</div>
+</div>
+
+<!-- ADD / EDIT LESSON -->
+<div class="ov" id="mLesson">
+<div class="modal">
+  <h2 id="lsnTitle">📅 إضافة حصة</h2>
+  <input type="hidden" id="lId">
+  <div class="fr2">
+    <div class="fg"><label class="fl">اليوم</label>
+      <select class="fi" id="lDay">
+        <option value="0">الأحد</option><option value="1">الاثنين</option>
+        <option value="2">الثلاثاء</option><option value="3">الأربعاء</option>
+        <option value="4">الخميس</option><option value="5">الجمعة</option>
+        <option value="6">السبت</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">الوقت</label><input class="fi" type="time" id="lTime"></div>
+  </div>
+  <div class="fr2">
+    <div class="fg"><label class="fl">اسم الحصة *</label><input class="fi" id="lName" placeholder="مثال: رياضيات 3أ"></div>
+    <div class="fg"><label class="fl">المجموعة</label><input class="fi" id="lGroup" placeholder="مجموعة أ"></div>
+  </div>
+  <div class="fr2">
+    <div class="fg"><label class="fl">المدة</label>
+      <select class="fi" id="lDur">
+        <option value="45">45 دقيقة</option><option value="60">ساعة</option>
+        <option value="90">ساعة ونص</option><option value="120">ساعتين</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">🔔 تنبيه قبل</label>
+      <select class="fi" id="lAlarm">
+        <option value="0">بدون</option><option value="5">5 دقائق</option>
+        <option value="10">10 دقائق</option><option value="15">15 دقيقة</option>
+        <option value="30">30 دقيقة</option>
+      </select>
+    </div>
+  </div>
+  <div class="fg">
+    <label class="fl">لون الحصة</label>
+    <div class="co-row" id="colorRow"></div>
+  </div>
+  <div class="brow">
+    <button class="btn-s" onclick="closeAll()">إلغاء</button>
+    <button class="btn-d" id="lsnDel" style="display:none" onclick="deleteLesson()">🗑️ حذف</button>
+    <button class="btn-p" onclick="saveLesson()">✅ حفظ</button>
+  </div>
+</div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="ov" id="mPay">
+<div class="modal">
+  <h2>💸 تسجيل دفعة</h2>
+  <input type="hidden" id="pSid">
+  <div id="pInfo" style="background:var(--s2);border-radius:10px;padding:11px;margin-bottom:12px;font-size:.82rem;border:1px solid var(--border)"></div>
+  <div class="fr2">
+    <div class="fg"><label class="fl">المبلغ (جنيه) *</label><input class="fi" type="number" id="pAmt" placeholder="0"></div>
+    <div class="fg"><label class="fl">الشهر</label>
+      <select class="fi" id="pMonth">
+        <option>يناير</option><option>فبراير</option><option>مارس</option><option>أبريل</option>
+        <option>مايو</option><option>يونيو</option><option>يوليو</option><option>أغسطس</option>
+        <option>سبتمبر</option><option>أكتوبر</option><option>نوفمبر</option><option>ديسمبر</option>
+      </select>
+    </div>
+  </div>
+  <div class="fg"><label class="fl">ملاحظة</label><input class="fi" id="pNote" placeholder="اختياري..."></div>
+  <div class="brow">
+    <button class="btn-s" onclick="closeAll()">إلغاء</button>
+    <button class="btn-p" onclick="recordPay()">💰 تسجيل</button>
+  </div>
+</div>
+</div>
+
+<!-- STUDENT DETAIL MODAL -->
+<div class="ov" id="mDetail">
+<div class="modal">
+  <h2 id="dTitle"></h2>
+  <div id="dContent"></div>
+  <div class="brow" style="margin-top:12px">
+    <button class="btn-d" id="dDel">🗑️ حذف</button>
+    <button class="btn-s" onclick="closeAll()">إغلاق</button>
+    <button class="btn-p" id="dEdit" style="flex:1.5">✏️ تعديل</button>
+    <button class="btn-p" id="dPay" style="flex:1.5;background:var(--teal)">💸 دفعة</button>
+  </div>
+</div>
+</div>
+
+<!-- EDIT SUBJECT MODAL -->
+<div class="ov" id="mSubj">
+<div class="modal">
+  <h2>✏️ تعديل اسم المادة</h2>
+  <input type="hidden" id="subjOldName">
+  <div class="fg"><label class="fl">الاسم الجديد</label><input class="fi" id="subjNewName"></div>
+  <div class="brow">
+    <button class="btn-s" onclick="closeAll()">إلغاء</button>
+    <button class="btn-p" onclick="saveSubjectEdit()">✅ حفظ</button>
+  </div>
+</div>
+</div>
+
+<!-- INSTALL BANNER (Android/Desktop) -->
+<div class="install-banner" id="installBanner">
+  <div class="install-top">
+    <div class="install-icon">🎓</div>
+    <div class="install-text">
+      <div class="t1">ثبّتي التطبيق على شاشتك!</div>
+      <div class="t2">يشتغل بدون إنترنت وبدون متصفح</div>
+    </div>
+  </div>
+  <div class="install-btns">
+    <button class="install-now" onclick="doInstall()">📲 تثبيت الآن</button>
+    <button class="install-later" onclick="dismissInstall()">لاحقاً</button>
+  </div>
+</div>
+
+<!-- iOS GUIDE -->
+<div class="ios-guide" id="iosGuide">
+  <div class="ios-box">
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="font-size:1rem;font-weight:700;color:#1a2236">📲 تثبيت التطبيق على iPhone/iPad</div>
+      <div style="font-size:.75rem;color:#8494ae;margin-top:4px">3 خطوات بسيطة</div>
+    </div>
+    <div class="ios-step">
+      <div class="ios-step-num">1</div>
+      <div class="ios-step-text">اضغطي على زر <span class="ios-step-icon">⎙</span> <strong>مشاركة</strong> في أسفل المتصفح (Safari)</div>
+    </div>
+    <div class="ios-step">
+      <div class="ios-step-num">2</div>
+      <div class="ios-step-text">اختاري <strong>"إضافة إلى الشاشة الرئيسية"</strong> <span class="ios-step-icon">➕</span></div>
+    </div>
+    <div class="ios-step">
+      <div class="ios-step-num">3</div>
+      <div class="ios-step-text">اضغطي <strong>إضافة</strong> وهيظهر أيقونة التطبيق على شاشتك 🎉</div>
+    </div>
+    <button onclick="document.getElementById('iosGuide').classList.remove('show')" style="width:100%;margin-top:16px;padding:13px;background:#3b6ff0;color:#fff;border:none;border-radius:12px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer">✅ فهمت!</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  PWA – MANIFEST & SERVICE WORKER
+// ══════════════════════════════════════════
+(function(){
+  // Generate app icon as SVG data URL
+  const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <rect width="512" height="512" rx="100" fill="#3b6ff0"/>
+    <text x="256" y="340" font-size="280" text-anchor="middle" font-family="serif">🎓</text>
+  </svg>`;
+  const iconUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(iconSvg)));
+
+  // Set apple touch icon
+  document.getElementById('appleIcon').href = iconUrl;
+
+  // Create manifest blob
+  const manifest = {
+    name: 'مُعلِّمتي Pro',
+    short_name: 'مُعلِّمتي',
+    description: 'تطبيق متابعة الطلاب والحضور',
+    start_url: './',
+    display: 'standalone',
+    orientation: 'portrait',
+    background_color: '#f0f4f8',
+    theme_color: '#3b6ff0',
+    lang: 'ar',
+    dir: 'rtl',
+    icons: [
+      { src: iconUrl, sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
+      { src: iconUrl, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+    ]
+  };
+  const manifestBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  document.getElementById('manifestLink').href = URL.createObjectURL(manifestBlob);
+
+  // Register service worker (inline as blob)
+  const swCode = `
+    const CACHE = 'mualimati-v1';
+    const ASSETS = ['/'];
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll([])));
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(clients.claim());
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(
+        fetch(e.request).catch(() => caches.match(e.request))
+      );
+    });
+  `;
+  const swBlob = new Blob([swCode], {type:'application/javascript'});
+  const swUrl  = URL.createObjectURL(swBlob);
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register(swUrl).catch(()=>{});
+  }
+})();
+
+// ══════════════════════════════════════════
+//  INSTALL PROMPT
+// ══════════════════════════════════════════
+let deferredPrompt = null;
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show banner after 2s
+  setTimeout(() => {
+    if(!localStorage.getItem('installDismissed'))
+      document.getElementById('installBanner').classList.add('show');
+  }, 2000);
+});
+
+// iOS: show guide if not standalone
+if(isIOS && !isStandalone){
+  setTimeout(()=>{
+    if(!localStorage.getItem('installDismissed'))
+      document.getElementById('iosGuide').classList.add('show');
+  }, 2000);
+}
+
+function doInstall(){
+  document.getElementById('installBanner').classList.remove('show');
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(r=>{
+      if(r.outcome==='accepted') toast('🎉 تم تثبيت التطبيق!');
+      deferredPrompt=null;
+    });
+  }
+}
+function dismissInstall(){
+  document.getElementById('installBanner').classList.remove('show');
+  localStorage.setItem('installDismissed','1');
+}
+
+// Hide banner if already installed
+window.addEventListener('appinstalled', ()=>{
+  document.getElementById('installBanner').classList.remove('show');
+  toast('🎉 تم تثبيت التطبيق على شاشتك!');
+});
+</script>
+<script>
+let S = JSON.parse(localStorage.getItem('mtp4')||'null') || {
+  students:[], attendance:{}, lessons:[], payments:{},
+  subjects:['رياضيات','علوم','عربي','انجليزي'],
+  firedAlarms:[]
+};
+const sv = ()=>localStorage.setItem('mtp4',JSON.stringify(S));
+
+// ── CONSTANTS ──
+const DAYS   = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const HOURS  = [8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+const COLORS = ['#3b6ff0','#0ea5a0','#db2777','#16a34a','#d97706','#dc2626','#7c3aed','#ea580c'];
+
+let payFilter   = 'all';
+let selColor    = COLORS[0];
+let ttActiveDay = new Date().getDay();
+
+const uid = ()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const clr = n=>COLORS[n.charCodeAt(0)%COLORS.length];
+const ini = n=>n.trim().split(' ').map(w=>w[0]).slice(0,2).join('');
+const todayStr = ()=>new Date().toISOString().split('T')[0];
+const curMonth = ()=>MONTHS[new Date().getMonth()];
+
+// ══════════════════════════════════════════
+//  CLOCK & ALARMS
+// ══════════════════════════════════════════
+function tick(){
+  const now=new Date();
+  document.getElementById('hTime').textContent=now.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('hDate').textContent=now.toLocaleDateString('ar-EG',{weekday:'long',month:'long',day:'numeric'});
+  checkAlarms(now);
+}
+setInterval(tick,15000); tick();
+
+function checkAlarms(now){
+  const todayDay=now.getDay(), nm=now.getHours()*60+now.getMinutes();
+  S.lessons.forEach(l=>{
+    if(parseInt(l.day)!==todayDay||!parseInt(l.alarm)) return;
+    const [lh,lm]=l.time.split(':').map(Number);
+    const trigMin=lh*60+lm-parseInt(l.alarm);
+    const key=l.id+'_'+todayStr();
+    if(nm>=trigMin&&nm<=trigMin+1&&!S.firedAlarms.includes(key)){
+      S.firedAlarms.push(key); sv();
+      document.getElementById('alarmTitle').textContent='📚 '+l.name;
+      document.getElementById('alarmSub').textContent=`باقي ${l.alarm} دقيقة — ${l.time} — ${l.group||''}`;
+      document.getElementById('alarmScr').classList.add('on');
+      beep();
+    }
+  });
+}
+function beep(){
+  try{
+    const ctx=new AudioContext();
+    [0,350,700].forEach(d=>{
+      setTimeout(()=>{
+        const o=ctx.createOscillator(),g=ctx.createGain();
+        o.connect(g);g.connect(ctx.destination);
+        o.frequency.value=880;
+        g.gain.setValueAtTime(.25,ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.45);
+        o.start();o.stop(ctx.currentTime+.45);
+      },d);
+    });
+  }catch(e){}
+}
+function dismissAlarm(){ document.getElementById('alarmScr').classList.remove('on'); }
+
+// ══════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════
+function showPg(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  if(btn) btn.classList.add('on');
+  document.getElementById('mainScroll').scrollTop=0;
+  const fab=document.getElementById('fab');
+  fab.style.display=['home','students','tt'].includes(id)?'flex':'none';
+  if(id==='att') renderAtt();
+  if(id==='tt')  renderTT();
+  if(id==='pay') renderPay(payFilter);
+  if(id==='rep') renderRep();
+  if(id==='set') renderSubjects();
+}
+function fabAct(){
+  const pg=document.querySelector('.page.on')?.id;
+  if(pg==='pg-tt') openLessonModal(null);
+  else openStudentModal(null);
+}
+
+// ══════════════════════════════════════════
+//  HOME
+// ══════════════════════════════════════════
+function renderHome(){
+  document.getElementById('stTot').textContent=S.students.length;
+  const att=S.attendance[todayStr()]||{};
+  document.getElementById('stPre').textContent=Object.values(att).filter(v=>v==='present').length;
+  document.getElementById('stUnp').textContent=S.students.filter(s=>payStatus(s.id)==='unpaid').length;
+
+  const day=new Date().getDay();
+  const tl=S.lessons.filter(l=>parseInt(l.day)===day).sort((a,b)=>a.time.localeCompare(b.time));
+  document.getElementById('hToday').innerHTML=tl.length
+    ?tl.map(l=>`<div class="lcard" onclick="openLessonModal('${l.id}')">
+        <div class="lcbar" style="background:${l.color||COLORS[0]}"></div>
+        <div style="flex:1"><div class="lcname">${l.name}</div><div class="lcgrp" style="color:${l.color||COLORS[0]}">${l.group||''}</div></div>
+        <div style="text-align:left"><div class="lctime">${l.time}</div><div class="lcsub">${l.dur} د</div></div>
+        ${parseInt(l.alarm)?'<div class="adot"></div>':''}
+      </div>`).join('')
+    :'<div class="empty"><span class="ei">📅</span>لا توجد حصص اليوم</div>';
+
+  const up=S.students.filter(s=>payStatus(s.id)!=='paid');
+  document.getElementById('hUnpaid').innerHTML=up.length
+    ?up.slice(0,5).map(s=>{
+        const due=calcDue(s.id);
+        return `<div class="prow" onclick="openPayModal('${s.id}')">
+          <div class="av" style="background:${clr(s.name)}18;color:${clr(s.name)}">${ini(s.name)}</div>
+          <div style="flex:1"><div class="sn">${s.name}</div><div class="ss">${s.group||''}</div></div>
+          <div class="pay-s bunpaid">متبقي ${due} ج</div>
+        </div>`;
+      }).join('')+(up.length>5?`<div style="text-align:center;color:var(--muted);font-size:.72rem;padding:6px">و ${up.length-5} طالب آخر...</div>`:'')
+    :'<div class="empty"><span class="ei">💚</span>الكل مدفّع هذا الشهر!</div>';
+}
+
+// ══════════════════════════════════════════
+//  STUDENTS
+// ══════════════════════════════════════════
+function renderStudents(){
+  const q=(document.getElementById('srch')?.value||'').toLowerCase();
+  const list=S.students.filter(s=>s.name.toLowerCase().includes(q)||!q);
+  document.getElementById('sEmpty').style.display=list.length?'none':'block';
+  document.getElementById('sList').innerHTML=list.map(s=>{
+    const rate=attRate(s.id);
+    const bc=rate>=80?'bg':rate>=60?'by':'br';
+    const ps=payStatus(s.id);
+    const psBadge=ps==='paid'?'bpaid':ps==='partial'?'bpart':'bunpaid';
+    const psLbl=ps==='paid'?'✓ مدفوع':ps==='partial'?'جزئي':'لم يدفع';
+    return `<div class="srow" onclick="openDetail('${s.id}')">
+      <div class="av" style="background:${clr(s.name)}18;color:${clr(s.name)}">${ini(s.name)}</div>
+      <div style="flex:1">
+        <div class="sn">${s.name}</div>
+        <div class="ss">${s.group||'—'}${s.subject?' · '+s.subject:''}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <span class="badge ${bc}">${rate}%</span>
+        <span class="badge ${psBadge}">${psLbl}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+//  ATTENDANCE (with past date support)
+// ══════════════════════════════════════════
+function initAttDate(){
+  if(!document.getElementById('attDate').value)
+    document.getElementById('attDate').value=todayStr();
+}
+function changeDay(dir){
+  const d=new Date(document.getElementById('attDate').value||todayStr());
+  d.setDate(d.getDate()+dir);
+  document.getElementById('attDate').value=d.toISOString().split('T')[0];
+  renderAtt();
+}
+function renderAtt(){
+  initAttDate();
+  const date=document.getElementById('attDate').value||todayStr();
+  const isToday=date===todayStr();
+  const isPast=date<todayStr();
+  const att=S.attendance[date]||{};
+
+  // Past date banner
+  const banner=document.getElementById('attHistBanner');
+  if(isPast){
+    const d=new Date(date);
+    const dayName=d.toLocaleDateString('ar-EG',{weekday:'long',month:'long',day:'numeric'});
+    banner.innerHTML=`<div class="hist-banner">📋 أنتِ تعدّلين حضور يوم ${dayName} — يمكنك التعديل بحرية ثم احفظي</div>`;
+  } else { banner.innerHTML=''; }
+
+  // Group tabs
+  const groups=[...new Set(S.students.map(s=>s.group||'عام'))];
+  const tabsEl=document.getElementById('grpTabs');
+  if(!tabsEl.dataset.g||!groups.includes(tabsEl.dataset.g)) tabsEl.dataset.g=groups[0]||'عام';
+  tabsEl.innerHTML=groups.map(g=>`<button class="dtab ${g===tabsEl.dataset.g?'on':''}" onclick="selGrp('${g}')">${g}</button>`).join('');
+
+  const grp=tabsEl.dataset.g;
+  const filt=S.students.filter(s=>(s.group||'عام')===grp);
+  const p=filt.filter(s=>att[s.id]==='present').length;
+  const a=filt.filter(s=>att[s.id]==='absent').length;
+  const l=filt.filter(s=>att[s.id]==='late').length;
+  const un=filt.filter(s=>!att[s.id]).length;
+
+  document.getElementById('attSum').innerHTML=`
+    <span class="chip" style="background:#dcfce7;color:var(--green)">✓ ${p} حاضر</span>
+    <span class="chip" style="background:#fef3c7;color:var(--yellow)">⏰ ${l} متأخر</span>
+    <span class="chip" style="background:#fee2e2;color:var(--red)">✗ ${a} غائب</span>
+    <span class="chip" style="background:#dbeafe;color:var(--accent)">${filt.length} طالب</span>`;
+
+  document.getElementById('attList').innerHTML=filt.length
+    ?filt.map(s=>{
+        const st=att[s.id]||'';
+        return `<div class="arow">
+          <div class="av" style="background:${clr(s.name)}18;color:${clr(s.name)};width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.76rem;flex-shrink:0">${ini(s.name)}</div>
+          <div style="flex:1"><div class="sn" style="font-size:.85rem">${s.name}</div></div>
+          <div class="abtns">
+            <button class="ab ${st==='present'?'sp':''}" style="${!st||st==='present'?'':'opacity:.5'}" onclick="setAtt('${s.id}','present')" title="حاضر">✓</button>
+            <button class="ab ${st==='late'?'sl':''}" style="${!st||st==='late'?'':'opacity:.5'}" onclick="setAtt('${s.id}','late')" title="متأخر">⏰</button>
+            <button class="ab ${st==='absent'?'sa':''}" style="${!st||st==='absent'?'':'opacity:.5'}" onclick="setAtt('${s.id}','absent')" title="غائب">✗</button>
+          </div>
+        </div>`;
+      }).join('')
+    :'<div class="empty"><span class="ei">📋</span>لا يوجد طلاب في هذه المجموعة</div>';
+}
+function selGrp(g){ document.getElementById('grpTabs').dataset.g=g; renderAtt(); }
+function setAtt(id,st){
+  const date=document.getElementById('attDate').value||todayStr();
+  if(!S.attendance[date]) S.attendance[date]={};
+  S.attendance[date][id]=st;
+  renderAtt();
+}
+function saveAtt(){
+  sv(); renderHome();
+  const date=document.getElementById('attDate').value||todayStr();
+  const label=date===todayStr()?'اليوم':date;
+  toast('✅ تم حفظ حضور '+label);
+}
+
+// ══════════════════════════════════════════
+//  TIMETABLE
+// ══════════════════════════════════════════
+function renderTT(){
+  const today=new Date().getDay();
+  const showDays=[0,1,2,3,4,5];
+  let html='<div class="tt-head" style="font-size:.55rem">الوقت</div>';
+  showDays.forEach(d=>{
+    const it=d===today;
+    html+=`<div class="tt-head" style="${it?'color:var(--accent);background:rgba(59,111,240,.08);border-color:rgba(59,111,240,.2)':''}">${DAYS[d].slice(0,5)}</div>`;
+  });
+  HOURS.forEach(h=>{
+    html+=`<div class="tt-hour">${h}:00</div>`;
+    showDays.forEach(d=>{
+      const it=d===today;
+      const ls=S.lessons.filter(l=>parseInt(l.day)===d&&parseInt(l.time.split(':')[0])===h);
+      if(ls.length){
+        const l=ls[0];
+        html+=`<div class="tt-cell ${it?'today-col':''}" onclick="openLessonModal('${l.id}')">
+          <div class="tt-ev" style="background:${l.color||COLORS[0]}18;height:100%">
+            <div class="tt-evn" style="color:${l.color||COLORS[0]}">${l.name}</div>
+            <div class="tt-evt" style="color:${l.color||COLORS[0]}">${l.time}</div>
+          </div></div>`;
+      } else {
+        html+=`<div class="tt-cell ${it?'today-col':''}" onclick="quickAdd(${d},${h})"></div>`;
+      }
+    });
+  });
+  document.getElementById('ttGrid').innerHTML=html;
+
+  // Day tabs
+  document.getElementById('ttDayTabs').innerHTML=DAYS.map((d,i)=>{
+    const it=i===today;
+    return `<button class="dtab ${i===ttActiveDay?'on':''} ${it?'today-t':''}" onclick="ttDay(${i})">${d}</button>`;
+  }).join('');
+
+  const dl=S.lessons.filter(l=>parseInt(l.day)===ttActiveDay).sort((a,b)=>a.time.localeCompare(b.time));
+  document.getElementById('ttList').innerHTML=dl.length
+    ?dl.map(l=>`<div class="lcard" onclick="openLessonModal('${l.id}')">
+        <div class="lcbar" style="background:${l.color||COLORS[0]}"></div>
+        <div style="flex:1"><div class="lcname">${l.name}</div><div class="lcgrp" style="color:${l.color||COLORS[0]}">${l.group||''}</div></div>
+        <div style="text-align:left"><div class="lctime">${l.time}</div><div class="lcsub">${l.dur} د ${parseInt(l.alarm)?'🔔':''}</div></div>
+        ${parseInt(l.alarm)?'<div class="adot"></div>':''}
+      </div>`).join('')
+    :'<div class="empty" style="padding:14px"><span class="ei" style="font-size:2rem">📅</span>لا توجد حصص</div>';
+}
+function ttDay(d){ ttActiveDay=d; renderTT(); }
+function quickAdd(day,hour){
+  openLessonModal(null);
+  setTimeout(()=>{
+    document.getElementById('lDay').value=day;
+    document.getElementById('lTime').value=`${String(hour).padStart(2,'0')}:00`;
+  },50);
+}
+
+// ══════════════════════════════════════════
+//  PAYMENTS
+// ══════════════════════════════════════════
+function payStatus(sid){
+  const s=S.students.find(x=>x.id===sid);
+  if(!s||!s.fee) return 'paid';
+  const paid=(S.payments[sid]||[]).filter(p=>p.month===curMonth()).reduce((a,b)=>a+Number(b.amount),0);
+  if(paid<=0) return 'unpaid';
+  return paid>=Number(s.fee)?'paid':'partial';
+}
+function calcDue(sid){
+  const s=S.students.find(x=>x.id===sid);
+  if(!s||!s.fee) return 0;
+  const paid=(S.payments[sid]||[]).filter(p=>p.month===curMonth()).reduce((a,b)=>a+Number(b.amount),0);
+  return Math.max(0,Number(s.fee)-paid);
+}
+function filterPay(f,btn){
+  payFilter=f;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  renderPay(f);
+}
+function renderPay(f='all'){
+  const list=S.students.filter(s=>f==='all'||payStatus(s.id)===f);
+  document.getElementById('payList').innerHTML=list.length
+    ?list.map(s=>{
+        const ps=payStatus(s.id);
+        const pc=ps==='paid'?'bpaid':ps==='partial'?'bpart':'bunpaid';
+        const pl=ps==='paid'?'✓ مدفوع':ps==='partial'?'دفع جزئي':'لم يدفع';
+        const due=calcDue(s.id);
+        const paid=(S.payments[s.id]||[]).filter(p=>p.month===curMonth()).reduce((a,b)=>a+Number(b.amount),0);
+        return `<div class="prow" onclick="openPayModal('${s.id}')">
+          <div class="av" style="background:${clr(s.name)}18;color:${clr(s.name)}">${ini(s.name)}</div>
+          <div style="flex:1">
+            <div class="sn">${s.name}</div>
+            <div class="ss">${s.group||''}${s.fee?' · الرسوم: '+s.fee+' ج':''}</div>
+            ${paid>0?`<div class="ss" style="color:var(--green)">دفع: ${paid} ج${due>0?' · متبقي: '+due+' ج':''}</div>`:''}
+          </div>
+          <div class="pay-s ${pc}">${pl}</div>
+        </div>`;
+      }).join('')
+    :'<div class="empty"><span class="ei">💸</span>لا يوجد نتائج</div>';
+}
+
+// ══════════════════════════════════════════
+//  REPORTS
+// ══════════════════════════════════════════
+function attRate(id){
+  let p=0,t=0;
+  for(const d in S.attendance){
+    const st=S.attendance[d][id];
+    if(st){t++;if(st==='present'||st==='late')p++;}
+  }
+  return t?Math.round(p/t*100):0;
+}
+function renderRep(){
+  if(!S.students.length){
+    document.getElementById('repList').innerHTML='<div class="empty"><span class="ei">📊</span>لا توجد بيانات بعد</div>';
+    document.getElementById('repAvg').textContent='—'; return;
+  }
+  const rates=S.students.map(s=>attRate(s.id));
+  const avg=Math.round(rates.reduce((a,b)=>a+b,0)/rates.length);
+  document.getElementById('repAvg').textContent=avg+'%';
+  document.getElementById('repBar').style.width=avg+'%';
+  document.getElementById('repList').innerHTML=[...S.students].sort((a,b)=>attRate(b.id)-attRate(a.id)).map(s=>{
+    const rate=attRate(s.id);
+    const col=rate>=80?'var(--green)':rate>=60?'var(--yellow)':'var(--red)';
+    let p=0,ab=0,l=0;
+    for(const d in S.attendance){
+      const st=S.attendance[d][s.id];
+      if(st==='present')p++;else if(st==='absent')ab++;else if(st==='late')l++;
+    }
+    return `<div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div class="av" style="background:${clr(s.name)}18;color:${clr(s.name)}">${ini(s.name)}</div>
+        <div style="flex:1"><div class="sn">${s.name}</div><div class="ss">${s.group||''}</div></div>
+        <div style="font-size:1.3rem;font-weight:700;color:${col}">${rate}%</div>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:7px;flex-wrap:wrap">
+        <span class="chip" style="background:#dcfce7;color:var(--green)">✓ ${p}</span>
+        <span class="chip" style="background:#fef3c7;color:var(--yellow)">⏰ ${l}</span>
+        <span class="chip" style="background:#fee2e2;color:var(--red)">✗ ${ab}</span>
+        <span class="chip" style="background:#dbeafe;color:var(--accent)">الإجمالي: ${p+l+ab}</span>
+      </div>
+      <div class="pbar"><div class="pf" style="background:${col};width:${rate}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+//  SUBJECTS MANAGEMENT (edit/delete/add)
+// ══════════════════════════════════════════
+function renderSubjects(){
+  document.getElementById('subjList').innerHTML=S.subjects.map(s=>{
+    const cnt=S.students.filter(st=>st.subject===s).length;
+    return `<div class="subj-row">
+      <span style="font-size:1.1rem">📚</span>
+      <div style="flex:1"><div class="sn">${s}</div><div class="ss">${cnt} طالب</div></div>
+      <button class="icon-btn edit" onclick="openSubjEdit('${s}')">✏️</button>
+      <button class="icon-btn del" onclick="deleteSubject('${s}')">🗑️</button>
+    </div>`;
+  }).join('') || '<div class="empty" style="padding:16px">لا توجد مواد</div>';
+}
+function openSubjEdit(name){
+  document.getElementById('subjOldName').value=name;
+  document.getElementById('subjNewName').value=name;
+  document.getElementById('mSubj').classList.add('on');
+}
+function saveSubjectEdit(){
+  const oldName=document.getElementById('subjOldName').value;
+  const newName=document.getElementById('subjNewName').value.trim();
+  if(!newName){alert('أدخلي الاسم');return;}
+  const idx=S.subjects.indexOf(oldName);
+  if(idx>-1) S.subjects[idx]=newName;
+  // Update students who had old subject
+  S.students.forEach(s=>{ if(s.subject===oldName) s.subject=newName; });
+  sv(); closeAll(); renderSubjects(); renderStudents(); toast('✅ تم تعديل اسم المادة');
+}
+function addSubject(){
+  const name=document.getElementById('newSubjInp').value.trim();
+  if(!name){alert('أدخلي اسم المادة');return;}
+  if(S.subjects.includes(name)){alert('المادة موجودة بالفعل');return;}
+  S.subjects.push(name);
+  document.getElementById('newSubjInp').value='';
+  sv(); renderSubjects(); toast('✅ تمت إضافة '+name);
+}
+function deleteSubject(name){
+  if(!confirm('حذف مادة "'+name+'"؟\nالطلاب المسجلين فيها ستُحذف مادتهم.')){return;}
+  S.subjects=S.subjects.filter(x=>x!==name);
+  S.students.forEach(s=>{ if(s.subject===name) s.subject=''; });
+  sv(); renderSubjects(); renderStudents(); toast('🗑️ تم حذف '+name);
+}
+
+// ══════════════════════════════════════════
+//  MODAL – STUDENT (ADD / EDIT)
+// ══════════════════════════════════════════
+function openStudentModal(id){
+  const s=id?S.students.find(x=>x.id===id):null;
+  document.getElementById('studentModalTitle').textContent=s?'✏️ تعديل بيانات الطالب':'➕ طالب جديد';
+  document.getElementById('sId').value=s?.id||'';
+  document.getElementById('sName').value=s?.name||'';
+  document.getElementById('sGroup').value=s?.group||'';
+  document.getElementById('sFee').value=s?.fee||'';
+  document.getElementById('sPhone').value=s?.phone||'';
+  document.getElementById('sNotes').value=s?.notes||'';
+  // Populate subjects
+  const sel=document.getElementById('sSubject');
+  sel.innerHTML=`<option value="">— بدون مادة —</option>`+S.subjects.map(x=>`<option value="${x}" ${s?.subject===x?'selected':''}>${x}</option>`).join('');
+  document.getElementById('mStudent').classList.add('on');
+}
+function saveStudent(){
+  const name=document.getElementById('sName').value.trim();
+  if(!name){alert('الرجاء إدخال اسم الطالب');return;}
+  const id=document.getElementById('sId').value;
+  const data={
+    id:id||uid(), name,
+    group:document.getElementById('sGroup').value.trim(),
+    subject:document.getElementById('sSubject').value,
+    fee:document.getElementById('sFee').value,
+    phone:document.getElementById('sPhone').value.trim(),
+    notes:document.getElementById('sNotes').value.trim()
+  };
+  if(id){ const i=S.students.findIndex(x=>x.id===id); S.students[i]=data; }
+  else S.students.push(data);
+  sv(); closeAll(); renderAll(); toast(id?'✅ تم تعديل بيانات '+name:'✅ تمت إضافة '+name);
+}
+
+// ══════════════════════════════════════════
+//  MODAL – LESSON
+// ══════════════════════════════════════════
+function openLessonModal(id){
+  const l=id?S.lessons.find(x=>x.id===id):null;
+  document.getElementById('lsnTitle').textContent=l?'تعديل حصة':'إضافة حصة';
+  document.getElementById('lId').value=l?.id||'';
+  document.getElementById('lDay').value=l?.day||String(new Date().getDay());
+  document.getElementById('lTime').value=l?.time||'10:00';
+  document.getElementById('lName').value=l?.name||'';
+  document.getElementById('lGroup').value=l?.group||'';
+  document.getElementById('lDur').value=l?.dur||'60';
+  document.getElementById('lAlarm').value=l?.alarm||'0';
+  document.getElementById('lsnDel').style.display=l?'block':'none';
+  selColor=l?.color||COLORS[0];
+  buildColors();
+  document.getElementById('mLesson').classList.add('on');
+}
+function buildColors(){
+  document.getElementById('colorRow').innerHTML=COLORS.map(c=>
+    `<div class="co ${c===selColor?'sel':''}" style="background:${c}" onclick="pickColor('${c}')"></div>`
+  ).join('');
+}
+function pickColor(c){ selColor=c; buildColors(); }
+function saveLesson(){
+  const id=document.getElementById('lId').value;
+  const data={
+    id:id||uid(),
+    day:document.getElementById('lDay').value,
+    time:document.getElementById('lTime').value,
+    name:document.getElementById('lName').value.trim()||'حصة',
+    group:document.getElementById('lGroup').value.trim(),
+    dur:document.getElementById('lDur').value,
+    alarm:document.getElementById('lAlarm').value,
+    color:selColor
+  };
+  if(id){ const i=S.lessons.findIndex(x=>x.id===id); S.lessons[i]=data; }
+  else S.lessons.push(data);
+  sv(); closeAll(); renderHome(); if(document.getElementById('pg-tt').classList.contains('on')) renderTT();
+  toast('✅ تم حفظ الحصة');
+}
+function deleteLesson(){
+  if(!confirm('حذف هذه الحصة؟')) return;
+  const id=document.getElementById('lId').value;
+  S.lessons=S.lessons.filter(x=>x.id!==id);
+  sv(); closeAll(); renderHome(); renderTT(); toast('🗑️ تم الحذف');
+}
+
+// ══════════════════════════════════════════
+//  MODAL – PAYMENT
+// ══════════════════════════════════════════
+function openPayModal(sid){
+  const s=S.students.find(x=>x.id===sid); if(!s) return;
+  document.getElementById('pSid').value=sid;
+  const paid=(S.payments[sid]||[]).filter(p=>p.month===curMonth()).reduce((a,b)=>a+Number(b.amount),0);
+  const due=calcDue(sid);
+  document.getElementById('pInfo').innerHTML=`<strong>${s.name}</strong> · ${s.group||'—'}<br>
+    الرسوم: ${s.fee||'—'} ج &nbsp;|&nbsp; 
+    <span style="color:var(--green)">دفع: ${paid} ج</span>
+    ${due>0?`<span style="color:var(--red)"> | متبقي: ${due} ج</span>`:'<span style="color:var(--green)"> ✓ مكتمل</span>'}`;
+  document.getElementById('pMonth').selectedIndex=new Date().getMonth();
+  document.getElementById('pAmt').value=due>0?due:'';
+  document.getElementById('pNote').value='';
+  document.getElementById('mPay').classList.add('on');
+}
+function recordPay(){
+  const sid=document.getElementById('pSid').value;
+  const amt=Number(document.getElementById('pAmt').value);
+  if(!amt||amt<=0){alert('أدخلي المبلغ');return;}
+  if(!S.payments[sid]) S.payments[sid]=[];
+  S.payments[sid].push({
+    id:uid(),
+    month:document.getElementById('pMonth').options[document.getElementById('pMonth').selectedIndex].text,
+    amount:amt, date:todayStr(),
+    note:document.getElementById('pNote').value
+  });
+  sv(); closeAll(); renderAll(); toast('💰 تم تسجيل دفعة '+amt+' ج');
+}
+
+// ══════════════════════════════════════════
+//  MODAL – DETAIL (with Edit button)
+// ══════════════════════════════════════════
+function openDetail(id){
+  const s=S.students.find(x=>x.id===id); if(!s) return;
+  const rate=attRate(id);
+  const col=rate>=80?'var(--green)':rate>=60?'var(--yellow)':'var(--red)';
+  let p=0,ab=0,l=0;
+  for(const d in S.attendance){const st=S.attendance[d][id];if(st==='present')p++;else if(st==='absent')ab++;else if(st==='late')l++;}
+  const pays=S.payments[id]||[];
+  const lastPays=[...pays].reverse().slice(0,5);
+  document.getElementById('dTitle').textContent=s.name;
+  document.getElementById('dContent').innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      <div class="av" style="width:52px;height:52px;font-size:1.1rem;background:${clr(s.name)}18;color:${clr(s.name)}">${ini(s.name)}</div>
+      <div>
+        <div style="font-size:.82rem;color:var(--muted);margin-bottom:3px">${s.group||'بدون مجموعة'}${s.subject?' · '+s.subject:''}</div>
+        ${s.phone?`<div style="font-size:.78rem;color:var(--teal)">📞 ${s.phone}</div>`:''}
+        ${s.fee?`<div style="font-size:.78rem;color:var(--yellow)">💸 الرسوم: ${s.fee} ج/شهر</div>`:''}
+        ${s.notes?`<div style="font-size:.75rem;color:var(--muted);margin-top:2px">📝 ${s.notes}</div>`:''}
+      </div>
+    </div>
+    <div class="sep"></div>
+    <div style="font-size:.72rem;color:var(--muted);margin:10px 0 6px;font-weight:600;text-transform:uppercase">الحضور</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:7px">
+      <span class="chip" style="background:#dcfce7;color:var(--green)">✓ ${p} حضور</span>
+      <span class="chip" style="background:#fef3c7;color:var(--yellow)">⏰ ${l} تأخر</span>
+      <span class="chip" style="background:#fee2e2;color:var(--red)">✗ ${ab} غياب</span>
+      <span class="chip" style="background:#dbeafe;color:var(--accent)">${rate}%</span>
+    </div>
+    <div class="pbar"><div class="pf" style="background:${col};width:${rate}%"></div></div>
+    ${lastPays.length?`
+      <div style="font-size:.72rem;color:var(--muted);margin:12px 0 6px;font-weight:600;text-transform:uppercase">سجل المدفوعات</div>
+      <div style="background:var(--s2);border-radius:10px;padding:10px;border:1px solid var(--border)">
+        ${lastPays.map(px=>`<div class="ph-row">
+          <span style="color:var(--muted)">${px.month} — ${px.date}</span>
+          <span style="color:var(--green);font-weight:700">${px.amount} ج</span>
+          <button class="ph-del" onclick="deletePay('${id}','${px.id}')">حذف</button>
+        </div>`).join('')}
+      </div>`:''}
+  `;
+  document.getElementById('dDel').onclick=()=>{
+    if(!confirm('حذف '+s.name+'؟')) return;
+    S.students=S.students.filter(x=>x.id!==id);
+    sv(); closeAll(); renderAll(); toast('🗑️ تم حذف '+s.name);
+  };
+  document.getElementById('dEdit').onclick=()=>{ closeAll(); openStudentModal(id); };
+  document.getElementById('dPay').onclick=()=>{ closeAll(); openPayModal(id); };
+  document.getElementById('mDetail').classList.add('on');
+}
+function deletePay(sid,pid){
+  if(!S.payments[sid]) return;
+  S.payments[sid]=S.payments[sid].filter(p=>p.id!==pid);
+  sv(); openDetail(sid); toast('🗑️ تم حذف الدفعة');
+}
+
+// ══════════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════════
+function exportData(){
+  const rows=S.students.map(s=>`${s.name}\t${s.group||''}\t${s.subject||''}\t${s.fee||''}\t${s.phone||''}\t${attRate(s.id)}%`);
+  const blob=new Blob(['الاسم\tالمجموعة\tالمادة\tالرسوم\tالموبايل\tنسبة الحضور\n'+rows.join('\n')],{type:'text/plain;charset=utf-8'});
+  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'تقرير_الطلاب.txt'});
+  a.click(); toast('📤 تم التصدير!');
+}
+function clearAll(){
+  if(!confirm('⚠️ مسح كل البيانات؟ لا يمكن التراجع!')) return;
+  S={students:[],attendance:{},lessons:[],payments:{},subjects:['رياضيات','علوم','عربي','انجليزي'],firedAlarms:[]};
+  sv(); renderAll(); renderSubjects(); toast('🗑️ تم مسح البيانات');
+}
+
+// ══════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════
+function closeAll(){ document.querySelectorAll('.ov').forEach(o=>o.classList.remove('on')); }
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o) closeAll(); }));
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),2600);
+}
+function renderAll(){
+  renderHome(); renderStudents();
+  if(document.getElementById('pg-att').classList.contains('on')) renderAtt();
+  if(document.getElementById('pg-tt').classList.contains('on')) renderTT();
+  if(document.getElementById('pg-pay').classList.contains('on')) renderPay(payFilter);
+  if(document.getElementById('pg-rep').classList.contains('on')) renderRep();
+}
+
+// ══════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════
+window.addEventListener('load',()=>{
+  document.getElementById('attDate').value=todayStr();
+  renderAll();
+});
+</script>
+</body>
+</html>
